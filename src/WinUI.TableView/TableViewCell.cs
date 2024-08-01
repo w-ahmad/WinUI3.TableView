@@ -40,7 +40,10 @@ public class TableViewCell : ContentControl
             contentWidth -= BorderThickness.Left;
             contentWidth -= BorderThickness.Right;
 
-            element.MaxWidth = contentWidth;
+            if (contentWidth > 0)
+            {
+                element.MaxWidth = contentWidth;
+            }
 
             if (Column is not null)
             {
