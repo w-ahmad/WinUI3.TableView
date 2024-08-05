@@ -1,26 +1,17 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="using:WinUI.TableView">
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinUI.TableView">
 
-    <StaticResource x:Key="TableViewGridLinesBrush"
-                    ResourceKey="ControlStrokeColorDefaultBrush" />
+    <StaticResource x:Key="TableViewGridLinesBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
+    <StaticResource x:Key="TableViewCellSelectionBrush" ResourceKey="FocusStrokeColorOuterBrush" />
+    <SolidColorBrush x:Key="TableViewCellHighlightBrush" Color="{StaticResource LayerFillColorDefault}" />
 
-    <StaticResource x:Key="TableViewCellSelectionBrush"
-                    ResourceKey="FocusStrokeColorOuterBrush" />
-
-    <SolidColorBrush x:Key="TableViewCellHighlightBrush"
-                     Color="{StaticResource LayerFillColorDefault}" />
-
-    <Style x:Key="DefaultTableViewCellStyle"
-           TargetType="local:TableViewCell">
-        <Setter Property="VerticalContentAlignment"
-                Value="Center" />
-        <Setter Property="HorizontalContentAlignment"
-                Value="Stretch" />
-        <Setter Property="BorderThickness"
-                Value="2" />
-        <Setter Property="CornerRadius"
-                Value="{ThemeResource ControlCornerRadius}" />
+    <Style x:Key="DefaultTableViewCellStyle" TargetType="local:TableViewCell">
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
         <Setter Property="Background">
             <Setter.Value>
                 <SolidColorBrush Opacity="0" />
@@ -30,21 +21,35 @@
             <Setter.Value>
                 <ControlTemplate TargetType="local:TableViewCell">
                     <Grid>
+                        <Border
+                            x:Name="SelectionBorder"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}" />
+                        <Border
+                            x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                            <ContentPresenter
+                                x:Name="Content"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal" />
                                 <VisualState x:Name="PointerOver">
                                     <VisualState.Setters>
-                                        <Setter Target="RootBorder.Background"
-                                                Value="{ThemeResource ListViewItemBackgroundPointerOver}" />
+                                        <Setter Target="RootBorder.Background" Value="{ThemeResource ListViewItemBackgroundPointerOver}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="SelectionStates">
                                 <VisualState x:Name="Selected">
                                     <VisualState.Setters>
-                                        <Setter Target="SelectionBorder.Background"
-                                                Value="{ThemeResource ListViewItemBackgroundSelected}" />
+                                        <Setter Target="SelectionBorder.Background" Value="{ThemeResource ListViewItemBackgroundSelected}" />
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="Unselected" />
@@ -53,25 +58,11 @@
                                 <VisualState x:Name="Regular" />
                                 <VisualState x:Name="Current">
                                     <VisualState.Setters>
-                                        <Setter Target="SelectionBorder.BorderBrush"
-                                                Value="{StaticResource TableViewCellSelectionBrush}" />
+                                        <Setter Target="SelectionBorder.BorderBrush" Value="{StaticResource TableViewCellSelectionBrush}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Border x:Name="SelectionBorder"
-                                CornerRadius="{TemplateBinding CornerRadius}"
-                                BorderThickness="{TemplateBinding BorderThickness}" />
-                        <Border x:Name="RootBorder"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{TemplateBinding CornerRadius}">
-                            <ContentPresenter x:Name="Content"
-                                              Margin="{TemplateBinding Padding}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
-                        </Border>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

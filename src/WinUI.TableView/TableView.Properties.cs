@@ -25,6 +25,7 @@ public partial class TableView
     public static readonly DependencyProperty MinColumnWidthProperty = DependencyProperty.Register(nameof(MinColumnWidth), typeof(double), typeof(TableView), new PropertyMetadata(50d, OnMinColumnWidthChanged));
     public static readonly DependencyProperty MaxColumnWidthProperty = DependencyProperty.Register(nameof(MaxColumnWidth), typeof(double), typeof(TableView), new PropertyMetadata(double.PositiveInfinity, OnMaxColumnWidthChanged));
     public static readonly DependencyProperty SelectionUnitProperty = DependencyProperty.Register(nameof(SelectionUnit), typeof(TableViewSelectionUnit), typeof(TableView), new PropertyMetadata(TableViewSelectionUnit.CellOrRow, OnSelectionUnitChanged));
+    public static readonly DependencyProperty SingleClickEditingProperty = DependencyProperty.Register(nameof(SingleClickEditing), typeof(bool), typeof(TableView), new PropertyMetadata(false));
 
     public IAdvancedCollectionView CollectionView { get; private set; } = new AdvancedCollectionView();
     internal IDictionary<string, Predicate<object>> ActiveFilters { get; } = new Dictionary<string, Predicate<object>>();
@@ -105,6 +106,12 @@ public partial class TableView
     {
         get => (bool)GetValue(CanFilterColumnsProperty);
         set => SetValue(CanFilterColumnsProperty, value);
+    }
+
+    public bool SingleClickEditing
+    {
+        get => (bool)GetValue(SingleClickEditingProperty);
+        set => SetValue(SingleClickEditingProperty, value);
     }
 
     public double MinColumnWidth

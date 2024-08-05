@@ -1,95 +1,67 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="using:WinUI.TableView">
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinUI.TableView">
 
-    <StaticResource x:Key="TableViewGridLinesBrush"
-                    ResourceKey="ControlStrokeColorDefaultBrush" />
+    <StaticResource x:Key="TableViewGridLinesBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
 
     <x:String x:Key="OptionsButtonIcon">&#xe712;</x:String>
     <x:String x:Key="SelectAllButtonIcon">&#xE936;</x:String>
 
-    <Style x:Key="DefaultTableViewHeaderRowStyle"
-           TargetType="local:TableViewHeaderRow">
-        <Setter Property="Height"
-                Value="32" />
-        <Setter Property="Background"
-                Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
+    <Style x:Key="DefaultTableViewHeaderRowStyle" TargetType="local:TableViewHeaderRow">
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:TableViewHeaderRow">
                     <Grid>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal" />
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="SelectAllButtonStates">
-                                <VisualState x:Name="SelectAllButton" />
-                                <VisualState x:Name="OptionsButton">
-                                    <VisualState.Setters>
-                                        <Setter Target="optionsButton.Visibility"
-                                                Value="Visible" />
-                                        <Setter Target="selectAllButton.Visibility"
-                                                Value="Collapsed" />
-                                        <Setter Target="selectAllCheckBox.Visibility"
-                                                Value="Collapsed" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                                <VisualState x:Name="SelectAllCheckBox">
-                                    <VisualState.Setters>
-                                        <Setter Target="selectAllCheckBox.Visibility"
-                                                Value="Visible" />
-                                        <Setter Target="selectAllButton.Visibility"
-                                                Value="Collapsed" />
-                                        <Setter Target="optionsButton.Visibility"
-                                                Value="Collapsed" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-
                         <Grid Background="{TemplateBinding Background}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Button x:Name="selectAllButton"
-                                    VerticalAlignment="Stretch"
-                                    BorderThickness="0,0,1,1"
-                                    Background="Transparent"
-                                    Padding="0"
-                                    CornerRadius="4,0,0,0"
-                                    Width="16"
-                                    Visibility="Visible"
-                                    IsTabStop="False"
-                                    BorderBrush="{ThemeResource TableViewGridLinesBrush}">
-                                <FontIcon FontSize="12"
-                                          Margin="6,20,0,0"
-                                          Opacity="0.5"
-                                          Glyph="{ThemeResource SelectAllButtonIcon}"
-                                          RenderTransformOrigin="0.5,0.5">
+                            <Button
+                                x:Name="selectAllButton"
+                                Width="16"
+                                Padding="0"
+                                VerticalAlignment="Stretch"
+                                Background="Transparent"
+                                BorderBrush="{ThemeResource TableViewGridLinesBrush}"
+                                BorderThickness="0,0,1,1"
+                                CornerRadius="4,0,0,0"
+                                IsTabStop="False"
+                                Visibility="Visible">
+                                <FontIcon
+                                    Margin="6,20,0,0"
+                                    FontSize="12"
+                                    Glyph="{ThemeResource SelectAllButtonIcon}"
+                                    Opacity="0.5"
+                                    RenderTransformOrigin="0.5,0.5">
                                     <FontIcon.RenderTransform>
                                         <RotateTransform Angle="-45" />
                                     </FontIcon.RenderTransform>
                                 </FontIcon>
                             </Button>
 
-                            <Button x:Name="optionsButton"
-                                    VerticalAlignment="Stretch"
-                                    BorderThickness="0,0,1,1"
-                                    Background="Transparent"
-                                    Padding="0"
-                                    CornerRadius="4,0,0,0"
-                                    Width="16"
-                                    Visibility="Collapsed"
-                                    IsTabStop="False"
-                                    BorderBrush="{ThemeResource TableViewGridLinesBrush}">
-                                <FontIcon FontSize="12"
-                                          Margin="4,0,0,0"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"
-                                          Glyph="{ThemeResource OptionsButtonIcon}"
-                                          RenderTransformOrigin="0.5,0.5">
+                            <Button
+                                x:Name="optionsButton"
+                                Width="16"
+                                Padding="0"
+                                VerticalAlignment="Stretch"
+                                Background="Transparent"
+                                BorderBrush="{ThemeResource TableViewGridLinesBrush}"
+                                BorderThickness="0,0,1,1"
+                                CornerRadius="4,0,0,0"
+                                IsTabStop="False"
+                                Visibility="Collapsed">
+                                <FontIcon
+                                    Margin="4,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="12"
+                                    Glyph="{ThemeResource OptionsButtonIcon}"
+                                    RenderTransformOrigin="0.5,0.5">
                                     <FontIcon.RenderTransform>
                                         <RotateTransform Angle="90" />
                                     </FontIcon.RenderTransform>
@@ -98,45 +70,41 @@
                                     <MenuFlyout Placement="BottomEdgeAlignedLeft">
                                         <MenuFlyoutItem Command="{Binding SelectAllCommand}">
                                             <MenuFlyoutItem.KeyboardAccelerators>
-                                                <KeyboardAccelerator Key="A"
-                                                                     Modifiers="Control"
-                                                                     ScopeOwner="{TemplateBinding TableView}" />
+                                                <KeyboardAccelerator
+                                                    Key="A"
+                                                    Modifiers="Control"
+                                                    ScopeOwner="{TemplateBinding TableView}" />
                                             </MenuFlyoutItem.KeyboardAccelerators>
                                         </MenuFlyoutItem>
-                                        <MenuFlyoutItem Command="{Binding DeselectAllCommand}"
-                                                        Icon="ClearSelection">
+                                        <MenuFlyoutItem Command="{Binding DeselectAllCommand}" Icon="ClearSelection">
                                             <MenuFlyoutItem.KeyboardAccelerators>
-                                                <KeyboardAccelerator Key="A"
-                                                                     Modifiers="Control,Shift" />
+                                                <KeyboardAccelerator Key="A" Modifiers="Control,Shift" />
                                             </MenuFlyoutItem.KeyboardAccelerators>
                                         </MenuFlyoutItem>
                                         <MenuFlyoutSeparator />
-                                        <MenuFlyoutItem Command="{Binding CopyCommand}"
-                                                        Icon="Copy">
+                                        <MenuFlyoutItem Command="{Binding CopyCommand}" Icon="Copy">
                                             <MenuFlyoutItem.KeyboardAccelerators>
-                                                <KeyboardAccelerator Key="C"
-                                                                     Modifiers="Control"
-                                                                     ScopeOwner="{TemplateBinding TableView}" />
+                                                <KeyboardAccelerator
+                                                    Key="C"
+                                                    Modifiers="Control"
+                                                    ScopeOwner="{TemplateBinding TableView}" />
                                             </MenuFlyoutItem.KeyboardAccelerators>
                                         </MenuFlyoutItem>
                                         <MenuFlyoutItem Command="{Binding CopyWithHeadersCommand}">
                                             <MenuFlyoutItem.KeyboardAccelerators>
-                                                <KeyboardAccelerator Key="C"
-                                                                     Modifiers="Control,Shift" />
+                                                <KeyboardAccelerator Key="C" Modifiers="Control,Shift" />
                                             </MenuFlyoutItem.KeyboardAccelerators>
                                         </MenuFlyoutItem>
                                         <MenuFlyoutSeparator />
                                         <MenuFlyoutItem Command="{Binding ClearSortingCommand}" />
                                         <MenuFlyoutItem Command="{Binding ClearFilterCommand}" />
-                                        <MenuFlyoutSeparator Visibility="{Binding Visibility, ElementName=ExportAllMenuItem}"/>
-                                        <MenuFlyoutItem x:Name="ExportAllMenuItem"
-                                                        Command="{Binding ExportAllToCSVCommand}">
+                                        <MenuFlyoutSeparator Visibility="{Binding Visibility, ElementName=ExportAllMenuItem}" />
+                                        <MenuFlyoutItem x:Name="ExportAllMenuItem" Command="{Binding ExportAllToCSVCommand}">
                                             <MenuFlyoutItem.Icon>
                                                 <FontIcon Glyph="&#xede1;" />
                                             </MenuFlyoutItem.Icon>
                                         </MenuFlyoutItem>
-                                        <MenuFlyoutItem x:Name="ExportSelectedMenuItem"
-                                                        Command="{Binding ExportSelectedToCSVCommand}">
+                                        <MenuFlyoutItem x:Name="ExportSelectedMenuItem" Command="{Binding ExportSelectedToCSVCommand}">
                                             <MenuFlyoutItem.Icon>
                                                 <FontIcon Glyph="&#xede1;" />
                                             </MenuFlyoutItem.Icon>
@@ -145,21 +113,46 @@
                                 </Button.Flyout>
                             </Button>
 
-                            <CheckBox x:Name="selectAllCheckBox"
-                                      Margin="14,0,2,0"
-                                      MinWidth="0"
-                                      IsTabStop="False"
-                                      IsThreeState="True"
-                                      Visibility="Collapsed" />
+                            <CheckBox
+                                x:Name="selectAllCheckBox"
+                                MinWidth="0"
+                                Margin="14,0,2,0"
+                                IsTabStop="False"
+                                IsThreeState="True"
+                                Visibility="Collapsed" />
 
-                            <StackPanel x:Name="HeadersStackPanel"
-                                        Grid.Column="1"
-                                        Orientation="Horizontal" />
+                            <StackPanel
+                                x:Name="HeadersStackPanel"
+                                Grid.Column="1"
+                                Orientation="Horizontal" />
 
-                            <Border Grid.Column="1"
-                                    BorderThickness="0,0,0,1"
-                                    BorderBrush="{ThemeResource TableViewGridLinesBrush}" />
+                            <Border
+                                Grid.Column="1"
+                                BorderBrush="{ThemeResource TableViewGridLinesBrush}"
+                                BorderThickness="0,0,0,1" />
                         </Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="SelectAllButtonStates">
+                                <VisualState x:Name="SelectAllButton" />
+                                <VisualState x:Name="OptionsButton">
+                                    <VisualState.Setters>
+                                        <Setter Target="optionsButton.Visibility" Value="Visible" />
+                                        <Setter Target="selectAllButton.Visibility" Value="Collapsed" />
+                                        <Setter Target="selectAllCheckBox.Visibility" Value="Collapsed" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="SelectAllCheckBox">
+                                    <VisualState.Setters>
+                                        <Setter Target="selectAllCheckBox.Visibility" Value="Visible" />
+                                        <Setter Target="selectAllButton.Visibility" Value="Collapsed" />
+                                        <Setter Target="optionsButton.Visibility" Value="Collapsed" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

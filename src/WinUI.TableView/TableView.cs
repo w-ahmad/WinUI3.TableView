@@ -284,7 +284,7 @@ public partial class TableView : ListView
         {
             slots = SelectedRanges.SelectMany(x => Enumerable.Range(x.FirstIndex, (int)x.Length))
                                   .SelectMany(r => Enumerable.Range(0, Columns.VisibleColumns.Count)
-                                                                     .Select(c => new TableViewCellSlot(r, c)))
+                                  .Select(c => new TableViewCellSlot(r, c)))
                                   .Concat(SelectedCells)
                                   .OrderBy(x => x.Row)
                                   .ThenByDescending(x => x.Column);
@@ -301,7 +301,7 @@ public partial class TableView : ListView
     {
         var slots = Enumerable.Range(0, Items.Count)
                               .SelectMany(r => Enumerable.Range(0, Columns.VisibleColumns.Count)
-                                                                 .Select(c => new TableViewCellSlot(r, c)))
+                              .Select(c => new TableViewCellSlot(r, c)))
                               .OrderBy(x => x.Row)
                               .ThenByDescending(x => x.Column);
 
@@ -515,6 +515,7 @@ public partial class TableView : ListView
 
             using var tw = new StreamWriter(stream);
             await tw.WriteAsync(content);
+            await tw.FlushAsync(); // needed?
         }
         catch { }
     }
@@ -529,7 +530,6 @@ public partial class TableView : ListView
         var savePicker = new FileSavePicker();
         InitializeWithWindow.Initialize(savePicker, hWnd);
         savePicker.FileTypeChoices.Add("CSV (Comma delimited)", new List<string>() { ".csv" });
-
         return await savePicker.PickSaveFileAsync();
     }
 
@@ -656,7 +656,7 @@ public partial class TableView : ListView
         }
     }
 
-    private void DeselectAllCells()
+    void DeselectAllCells()
     {
         SelectedCellRanges.Clear();
         OnCellSelectionChanged();
@@ -760,7 +760,7 @@ public partial class TableView : ListView
         CurrentCellChanged?.Invoke(this, new TableViewCurrentCellChangedEventArgs(oldSlot, slot));
     }
 
-    private void OnCellSelectionChanged()
+    void OnCellSelectionChanged()
     {
         var oldSelection = SelectedCells;
         SelectedCells = new HashSet<TableViewCellSlot>(SelectedCellRanges.SelectMany(x => x));
@@ -823,7 +823,7 @@ public partial class TableView : ListView
         return row?.Cells.ElementAt(slot.Column)!;
     }
 
-    private async Task<TableViewRow?> ScrollRowIntoView(int index)
+    async Task<TableViewRow?> ScrollRowIntoView(int index)
     {
         var item = Items[index];
         index = Items.IndexOf(item); // if the ItemsSource has duplicate items in it. ScrollIntoView will only bring first index of item.
@@ -905,7 +905,7 @@ public partial class TableView : ListView
         return (start, end);
     }
 
-    private void UpdateBaseSelectionMode()
+    void UpdateBaseSelectionMode()
     {
         _shouldThrowSelectionModeChangedException = true;
         base.SelectionMode = SelectionUnit is TableViewSelectionUnit.Cell ? ListViewSelectionMode.None : SelectionMode;

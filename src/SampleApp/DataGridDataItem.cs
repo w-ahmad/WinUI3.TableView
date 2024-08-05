@@ -1,8 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,27 +10,29 @@ namespace SampleApp;
 
 public class DataGridDataItem : INotifyDataErrorInfo, IComparable, INotifyPropertyChanged
 {
-    private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
-    private uint _rank;
-    private string _mountain;
-    private uint _height;
-    private string _range;
-    private string _parentMountain;
-    private string coordinates;
-    private uint prominence;
-    private DateTimeOffset first_ascent;
-    private string ascents;
+    string _mountain;
+    string _range;
+    string _parentMountain;
+    string _coordinates;
+    string _ascents;
+    uint _rank;
+    uint _height;
+    uint _prominence;
+    DateTimeOffset _firstAscent;
+    Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
     public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
     public event PropertyChangedEventHandler PropertyChanged;
 
+    void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        if (!string.IsNullOrEmpty(propertyName))
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
     public uint Rank
     {
-        get
-        {
-            return _rank;
-        }
-
+        get => _rank;
         set
         {
             if (_rank != value)
@@ -47,11 +45,7 @@ public class DataGridDataItem : INotifyDataErrorInfo, IComparable, INotifyProper
 
     public string Mountain
     {
-        get
-        {
-            return _mountain;
-        }
-
+        get => _mountain;
         set
         {
             if (_mountain != value)
@@ -79,11 +73,7 @@ public class DataGridDataItem : INotifyDataErrorInfo, IComparable, INotifyProper
 
     public uint Height_m
     {
-        get
-        {
-            return _height;
-        }
-
+        get => _height;
         set
         {
             if (_height != value)
@@ -96,11 +86,7 @@ public class DataGridDataItem : INotifyDataErrorInfo, IComparable, INotifyProper
 
     public string Range
     {
-        get
-        {
-            return _range;
-        }
-
+        get => _range;
         set
         {
             if (_range != value)
@@ -128,11 +114,7 @@ public class DataGridDataItem : INotifyDataErrorInfo, IComparable, INotifyProper
 
     public string Parent_mountain
     {
-        get
-        {
-            return _parentMountain;
-        }
-
+        get => _parentMountain;
         set
         {
             if (_parentMountain != value)
@@ -160,12 +142,12 @@ public class DataGridDataItem : INotifyDataErrorInfo, IComparable, INotifyProper
 
     public string Coordinates
     {
-        get => coordinates;
+        get => _coordinates;
         set
         {
-            if (coordinates != value)
+            if (_coordinates != value)
             {
-                coordinates = value;
+                _coordinates = value;
                 OnPropertyChanged();
             }
         }
@@ -173,25 +155,28 @@ public class DataGridDataItem : INotifyDataErrorInfo, IComparable, INotifyProper
 
     public uint Prominence
     {
-        get => prominence;
+        get => _prominence;
         set
         {
-            if (prominence != value)
+            if (_prominence != value)
             {
-                prominence = value;
+                _prominence = value;
                 OnPropertyChanged();
             }
         }
     }
 
-    // You need to use DateTimeOffset to get proper binding to the CalendarDatePicker control, DateTime won't work.
+    /// <summary>
+    /// You need to use DateTimeOffset to get proper binding to the CalendarDatePicker control, DateTime won't work.
+    /// </summary>
     public DateTimeOffset First_ascent
     {
-        get => first_ascent; set
+        get => _firstAscent; 
+        set
         {
-            if (first_ascent != value)
+            if (_firstAscent != value)
             {
-                first_ascent = value;
+                _firstAscent = value;
                 OnPropertyChanged();
             }
         }
@@ -199,11 +184,12 @@ public class DataGridDataItem : INotifyDataErrorInfo, IComparable, INotifyProper
 
     public string Ascents
     {
-        get => ascents; set
+        get => _ascents; 
+        set
         {
-            if (ascents != value)
+            if (_ascents != value)
             {
-                ascents = value;
+                _ascents = value;
                 OnPropertyChanged();
             }
         }
@@ -211,27 +197,18 @@ public class DataGridDataItem : INotifyDataErrorInfo, IComparable, INotifyProper
 
     bool INotifyDataErrorInfo.HasErrors
     {
-        get
-        {
-            return _errors.Keys.Count > 0;
-        }
+        get => _errors.Keys.Count > 0;
     }
 
     IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName)
     {
         if (propertyName == null)
-        {
             propertyName = string.Empty;
-        }
 
         if (_errors.ContainsKey(propertyName))
-        {
             return _errors[propertyName];
-        }
         else
-        {
             return null;
-        }
     }
 
     int IComparable.CompareTo(object obj)
@@ -239,17 +216,8 @@ public class DataGridDataItem : INotifyDataErrorInfo, IComparable, INotifyProper
         int lnCompare = Range.CompareTo((obj as DataGridDataItem).Range);
 
         if (lnCompare == 0)
-        {
             return Parent_mountain.CompareTo((obj as DataGridDataItem).Parent_mountain);
-        }
         else
-        {
             return lnCompare;
-        }
-    }
-
-    private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

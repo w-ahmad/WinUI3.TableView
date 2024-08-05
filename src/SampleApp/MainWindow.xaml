@@ -1,54 +1,137 @@
-<Window x:Class="SampleApp.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:converters="using:CommunityToolkit.WinUI.Converters"
-        xmlns:table="using:WinUI.TableView"
-        mc:Ignorable="d">
+<Window
+    x:Class="SampleApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:CommunityToolkit.WinUI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helper="using:SampleApp.Helpers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:table="using:WinUI.TableView"
+    Title="TableView Demo"
+    mc:Ignorable="d">
 
-    <Grid Loaded="OnRootGridLoaded"
-          Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid
+        x:Name="root"
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+        Loaded="OnRootGridLoaded">
         <Grid.Resources>
             <converters:StringFormatConverter x:Key="StringFormatConverter" />
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-            <Button Margin="16"
-                    Content="Laod More Items"
-                    Click="OnLoadMoreButtonClick" />
-            <Button Margin="16"
-                    Content="Clear And Load"
-                    Click="OnClearAndLoadButtonClick" />
-        </StackPanel>
+        <Grid
+            x:Name="CustomTitleBar"
+            Grid.Row="0"
+            Height="30"
+            Margin="0">
+            <StackPanel Orientation="Horizontal">
+                <Image
+                    Width="25"
+                    Height="25"
+                    Margin="4,1"
+                    Source="ms-appx:///Assets/StoreLogo.png" />
+                <TextBlock
+                    Margin="2,0"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{x:Bind Title, Mode=OneWay}" />
+            </StackPanel>
+        </Grid>
 
-        <table:TableView x:Name="tableView"
-                         Grid.Row="1"
-                         Margin="16"
-                         SelectionMode="Extended">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+            <Image
+                x:Name="imgSpinner"
+                Grid.Column="0"
+                Width="50"
+                Height="50"
+                Margin="30,1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Source="ms-appx:///Assets/SpinnerRing.png"
+                Stretch="Uniform">
+                <Image.Resources>
+                    <Storyboard x:Name="StoryboardSpinner" RepeatBehavior="Forever">
+                        <DoubleAnimation
+                            x:Name="dblAnimation"
+                            Storyboard.TargetName="spinnerTransform"
+                            Storyboard.TargetProperty="Angle"
+                            From="0"
+                            To="360"
+                            Duration="00:00:00.8">
+                            <!--
+                            <DoubleAnimation.EasingFunction>
+                                <CircleEase EasingMode="EaseInOut" />
+                                <BackEase Amplitude="0.5" EasingMode="EaseInOut" />
+                                <ElasticEase Oscillations="2" Springiness="0.5" />
+                            </DoubleAnimation.EasingFunction>
+                            -->
+                        </DoubleAnimation>
+                    </Storyboard>
+                </Image.Resources>
+                <Image.RenderTransform>
+                    <!--  This must be equal to half of the image width/height.  -->
+                    <RotateTransform x:Name="spinnerTransform" CenterX="25" CenterY="25" />
+                </Image.RenderTransform>
+            </Image>
+
+            <StackPanel
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <Button
+                    Margin="16"
+                    Click="OnLoadMoreButtonClick"
+                    Content="Load More Items" />
+                <Button
+                    Margin="16"
+                    Click="OnClearAndLoadButtonClick"
+                    Content="Clear And Load" />
+                <ToggleSwitch
+                    x:Name="SingleClickEditToggle"
+                    Margin="16,16,30,16"
+                    VerticalAlignment="Bottom"
+                    IsOn="False"
+                    OffContent="SingleClickEdit Disabled"
+                    OnContent="SingleClickEdit Enabled"
+                    Toggled="SingleClickEditOnToggled" />
+            </StackPanel>
+        </Grid>
+
+        <table:TableView
+            x:Name="tableView"
+            Grid.Row="2"
+            Margin="16"
+            SelectionMode="Extended"
+            ShowExportOptions="True"
+            SingleClickEditing="{x:Bind SingleClickEditToggle.IsOn, Mode=OneWay}">
+            <!--
+                We could change the SingleClickEditing property to have to be set per
+                each TableViewBoundColumn type, but this is simpler for the user.
+            -->
             <table:TableView.Columns>
-                <table:TableViewTextColumn Header="Rank"
-                                           Binding="{Binding Rank}" />
-                <table:TableViewComboBoxColumn Header="Mountain"
-                                               Binding="{Binding Mountain}"
-                                               ItemsSource="{x:Bind _mountains}" />
-                <table:TableViewTextColumn Header="Height (m)"
-                                           Binding="{Binding Height_m, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:N0}'}" />
-                <table:TableViewTextColumn Header="Range"
-                                           Binding="{Binding Range}" />
-                <table:TableViewTextColumn Header="Parent Mountain"
-                                           Binding="{Binding Parent_mountain}" />
+                <table:TableViewTextColumn Binding="{Binding Rank}" Header="Rank" />
+                <table:TableViewComboBoxColumn
+                    Binding="{Binding Mountain}"
+                    Header="Mountain"
+                    ItemsSource="{x:Bind _mountains}" />
+                <table:TableViewTextColumn Binding="{Binding Height_m, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:N0}'}" Header="Height (m)" />
+                <table:TableViewTextColumn Binding="{Binding Range}" Header="Range" />
+                <table:TableViewTextColumn Binding="{Binding Parent_mountain}" Header="Parent Mountain" />
                 <table:TableViewTemplateColumn Header="First Ascent">
                     <table:TableViewTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding First_ascent, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:MMM/dd/yyy}'}"
-                                       VerticalAlignment="Center"
-                                       Margin="8,0,0,0" />
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding First_ascent, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:MMM/dd/yyy}'}" />
                         </DataTemplate>
                     </table:TableViewTemplateColumn.CellTemplate>
                     <table:TableViewTemplateColumn.EditingTemplate>
@@ -59,5 +142,6 @@
                 </table:TableViewTemplateColumn>
             </table:TableView.Columns>
         </table:TableView>
+
     </Grid>
 </Window>

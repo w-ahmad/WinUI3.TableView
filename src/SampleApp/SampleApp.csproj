@@ -6,7 +6,28 @@
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <SelfContained>true</SelfContained>
     <WindowsPackageType>None</WindowsPackageType>
+    <LangVersion>latest</LangVersion>
+    <ApplicationIcon>Assets\StoreLogoAlt.ico</ApplicationIcon>
+    <!-- 
+      Get rid of all the unnecessary pathing that MS adds and 
+      makes the output match the traditional .NET Framework builds.
+    -->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <!-- 
+      https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#optimizeimplicitlytriggeredbuild 
+    -->
+    <OptimizeImplicitlyTriggeredBuild>true</OptimizeImplicitlyTriggeredBuild>
+    <!-- 
+      If true, this will create a subfolder named "refs" which contains all of the possible framework dependencies. The default value is false.
+      https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#preservecompilationcontext
+    -->
+    <PreserveCompilationContext>false</PreserveCompilationContext>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Assets\StoreLogo.ico" />
+    <None Remove="Assets\StoreLogoAlt.ico" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\WinUI.TableView\WinUI.TableView.csproj" />
@@ -21,4 +42,39 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <!-- 
+      This target will remove the language folders inside the build output except the specified one. 
+  -->
+    <Target Name="RemoveFoldersWithMuiFiles" Condition="'$(WindowsPackageType)' == 'None'" AfterTargets="Build">
+        <ItemGroup>
+            <RemovingFiles Include="$(OutDir)*\*.mui" Exclude="$(OutDir)en-us\*.mui" />
+            <RemovingFolders Include="@(RemovingFiles->'%(RootDir)%(Directory)')" />
+            <RemovingCS Include="$(OutDir)cs" />
+            <RemovingDE Include="$(OutDir)de" />
+            <RemovingES Include="$(OutDir)es" />
+            <RemovingFR Include="$(OutDir)fr" />
+            <RemovingIT Include="$(OutDir)it" />
+            <RemovingJA Include="$(OutDir)ja" />
+            <RemovingKO Include="$(OutDir)ko" />
+            <RemovingPL Include="$(OutDir)pl" />
+            <RemovingRU Include="$(OutDir)ru" />
+            <RemovingTR Include="$(OutDir)tr" />
+            <RemovingZHS Include="$(OutDir)zh-Hans" />
+            <RemovingZHT Include="$(OutDir)zh-Hant" />
+        </ItemGroup>
+        <RemoveDir Directories="@(RemovingFolders)" />
+        <RemoveDir Directories="@(RemovingCS)" />
+        <RemoveDir Directories="@(RemovingDE)" />
+        <RemoveDir Directories="@(RemovingES)" />
+        <RemoveDir Directories="@(RemovingFR)" />
+        <RemoveDir Directories="@(RemovingIT)" />
+        <RemoveDir Directories="@(RemovingJA)" />
+        <RemoveDir Directories="@(RemovingKO)" />
+        <RemoveDir Directories="@(RemovingPL)" />
+        <RemoveDir Directories="@(RemovingRU)" />
+        <RemoveDir Directories="@(RemovingTR)" />
+        <RemoveDir Directories="@(RemovingZHS)" />
+        <RemoveDir Directories="@(RemovingZHT)" />
+    </Target>
 </Project>

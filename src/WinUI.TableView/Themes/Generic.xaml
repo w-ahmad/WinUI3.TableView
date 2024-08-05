@@ -1,6 +1,7 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="using:WinUI.TableView">
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinUI.TableView">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ms-appx:///WinUI.TableView/Themes/TableView.xaml" />
@@ -10,22 +11,13 @@
         <ResourceDictionary Source="ms-appx:///WinUI.TableView/Themes/TableViewRow.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <!--Hack for auto generated resize issue-->
+    <!--  Hack for auto generated resize issue  -->
     <local:TableViewTextColumn x:Key="ThisNeedsToBeHere" />
-    
-    <Style TargetType="local:TableViewHeaderRow"
-           BasedOn="{StaticResource DefaultTableViewHeaderRowStyle}" />
 
-    <Style TargetType="local:TableViewColumnHeader"
-           BasedOn="{StaticResource DefaultTableViewColumnHeaderStyle}" />
-
-    <Style TargetType="local:TableViewCell"
-           BasedOn="{StaticResource DefaultTableViewCellStyle}" />
-
-    <Style TargetType="local:TableViewRow"
-           BasedOn="{StaticResource DefaultTableViewRowStyle}" />
-
-    <Style TargetType="local:TableView"
-           BasedOn="{StaticResource DefaultTableViewStyle}" />
+    <Style BasedOn="{StaticResource DefaultTableViewHeaderRowStyle}" TargetType="local:TableViewHeaderRow" />
+    <Style BasedOn="{StaticResource DefaultTableViewColumnHeaderStyle}" TargetType="local:TableViewColumnHeader" />
+    <Style BasedOn="{StaticResource DefaultTableViewCellStyle}" TargetType="local:TableViewCell" />
+    <Style BasedOn="{StaticResource DefaultTableViewRowStyle}" TargetType="local:TableViewRow" />
+    <Style BasedOn="{StaticResource DefaultTableViewStyle}" TargetType="local:TableView" />
 
 </ResourceDictionary>
